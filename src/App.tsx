@@ -1,6 +1,12 @@
+import { UseStatePractice } from "./built-in-hooks";
 import "./style.css";
+
 const App = () => {
-  return <div>App</div>;
+  return (
+    <main className="main-content">
+      <UseStatePractice />
+    </main>
+  );
 };
 
 export default App;
