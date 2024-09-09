@@ -1,3 +1,3 @@
 import UseStatePractice from "./components/UseStatePractice";
-
-export { UseStatePractice };
+import UseEffectPractice from "./components/UseEffectPractice";
+export { UseStatePractice, UseEffectPractice };
