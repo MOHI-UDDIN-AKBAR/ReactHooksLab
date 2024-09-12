@@ -1,22 +1,69 @@
-import { createContext, ReactNode, useState } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-type ThemeContextType = {
-  isDark: boolean;
-  setIsDark: React.Dispatch<React.SetStateAction<boolean>>;
+const POSTS_API_URL = "https://jsonplaceholder.typicode.com/posts";
+
+type PostType = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
 };
 
-export const themeContext = createContext<undefined | ThemeContextType>(
-  undefined
-);
+type PostContextType = {
+  posts: PostType[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+const PostsContext = createContext<PostContextType | undefined>(undefined);
 
 const UseContextPractice = ({ children }: { children: ReactNode }) => {
-  const [isDark, setIsDark] = useState<boolean>(false);
+  const [posts, setPost] = useState<PostType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<null | string>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(POSTS_API_URL);
+        if (!res.ok) throw new Error("Failed to fetch posts");
+        const postData = await res.json();
+        setPost(postData.slice(0, 10));
+        setError(null);
+      } catch (err: any) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   return (
-    <themeContext.Provider value={{ isDark, setIsDark }}>
+    <PostsContext.Provider value={{ posts, isLoading, error }}>
       {children}
-    </themeContext.Provider>
+    </PostsContext.Provider>
   );
+};
+
+export const usePostsContext = () => {
+  const context = useContext(PostsContext);
+
+  if (!context) {
+    throw new Error(
+      "usePostsContext must be used within a UseContextPractice provider"
+    );
+  }
+  return context;
 };
 
 export default UseContextPractice;
