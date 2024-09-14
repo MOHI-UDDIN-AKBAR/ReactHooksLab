@@ -15,7 +15,6 @@ type PostPropsType = {
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
 const Post = memo(({ fetchPostData, posts }: PostPropsType) => {
-  console.log("It is rendering when count is changing");
   useEffect(() => {
     fetchPostData();
   }, [fetchPostData]);
@@ -53,7 +52,6 @@ const UseCallbackPractice = () => {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Post Not Found!");
       const postsData = await response.json();
-      console.log(postsData.slice(0, 10));
       setPosts(postsData.slice(0, 10));
     } catch (e: any) {
       console.error(e.message);
