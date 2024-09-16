@@ -108,14 +108,6 @@ const JustPractice = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(errorMessage);
-  }, [errorMessage]);
-
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   const removeErrorMessage = useCallback((fieldType: keyof User) => {
     setErrorMessage((prev) => ({ ...prev, [fieldType]: "" }));
   }, []);
