@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
@@ -12,6 +12,7 @@ type PostType = {
 const JustPracticeThree = () => {
   const [searchInput, setSearchInput] = useState("");
   const [posts, setPosts] = useState<PostType[] | null>(null);
+  const [filteredPosts, setFilteredPosts] = useState<PostType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -52,11 +53,21 @@ const JustPracticeThree = () => {
     fetchPostData();
   }, []);
 
-  const postData = searchInput
-    ? posts?.filter(({ title }) =>
+  const filterPosts = useCallback(
+    (searchInput: string) => {
+      const filteredPostBySearchInput = posts?.filter(({ title }) =>
         title.toLowerCase().includes(searchInput.toLowerCase())
-      )
-    : posts;
+      );
+      filteredPostBySearchInput && setFilteredPosts(filteredPostBySearchInput);
+    },
+    [posts]
+  );
+
+  useEffect(() => {
+    filterPosts(searchInput);
+  }, [searchInput, filterPosts]);
+
+  const postData = searchInput ? filteredPosts : posts;
 
   return (
     <article className="post-data">
