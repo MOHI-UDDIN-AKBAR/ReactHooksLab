@@ -53,19 +53,16 @@ const JustPracticeThree = () => {
     fetchPostData();
   }, []);
 
-  const filterPosts = useCallback(
-    (searchInput: string) => {
-      const filteredPostBySearchInput = posts?.filter(({ title }) =>
-        title.toLowerCase().includes(searchInput.toLowerCase())
-      );
-      filteredPostBySearchInput && setFilteredPosts(filteredPostBySearchInput);
-    },
-    [posts]
-  );
+  const filterPosts = useCallback(() => {
+    const filteredPostBySearchInput = posts?.filter(({ title }) =>
+      title.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    filteredPostBySearchInput && setFilteredPosts(filteredPostBySearchInput);
+  }, [posts, searchInput]);
 
   useEffect(() => {
-    filterPosts(searchInput);
-  }, [searchInput, filterPosts]);
+    filterPosts();
+  }, [filterPosts]);
 
   const postData = searchInput ? filteredPosts : posts;
 
