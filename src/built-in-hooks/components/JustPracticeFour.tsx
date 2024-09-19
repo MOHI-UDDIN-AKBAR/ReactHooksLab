@@ -1,97 +1,94 @@
-import { useCallback, useDeferredValue, useEffect, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-const POST_API_URL = "https://jsonplaceholder.typicode.com/posts";
-
-type Post = {
-  id: number;
-  title: string;
-  body: string;
+type CustomRef = {
+  focusCancelBtn: () => void;
+  focusConfirmBtn: () => void;
+  focusDenyBtn: () => void;
 };
 
-type PostsProps = {
-  posts: Post[];
-  isLoading: boolean;
-  errorMessage: string;
-  searchQuery: string;
-};
+const Modal = forwardRef<
+  CustomRef,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>((props, ref) => {
+  const cancelRef = useRef<HTMLButtonElement | null>(null);
+  const confirmRef = useRef<HTMLButtonElement | null>(null);
+  const denyRef = useRef<HTMLButtonElement | null>(null);
 
-const Posts = ({ posts, isLoading, errorMessage, searchQuery }: PostsProps) => {
-  const deferredQuery = useDeferredValue(searchQuery);
+  const focusCancelBtn = useCallback(() => cancelRef.current?.focus(), []);
+  const focusConfirmBtn = useCallback(() => confirmRef.current?.focus(), []);
+  const focusDenyBtn = useCallback(() => denyRef.current?.focus(), []);
 
-  const filteredPosts = posts.filter(({ title }) =>
-    title.includes(deferredQuery)
-  );
-
-  for (let i = 0; i < 100000000; i++) {}
-
-  const displayPosts = filteredPosts.length ? filteredPosts : posts;
+  useImperativeHandle(ref, () => ({
+    focusCancelBtn,
+    focusConfirmBtn,
+    focusDenyBtn,
+  }));
 
   return (
-    <div className="posts">
-      <div className="post-status">
-        {isLoading && <p className="loader">Loading...</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-      </div>
-      {displayPosts.map(({ title, id, body }) => (
-        <div
-          className="post-card"
-          key={id}
-          style={{
-            border: "2px solid #6262b5",
-            margin: "2rem",
-            padding: "1rem",
-          }}
-        >
-          <h4 className="post-title">{title}</h4>
-          <p className="post-body">{body}</p>
+    <div className="modal">
+      <div className="modal-content">
+        <div className="modal-header">
+          <button type="button" className="cancel-btn" ref={cancelRef}>
+            X
+          </button>
+          <h2 className="modal-title">Title</h2>
         </div>
-      ))}
+        <div className="modal-body">
+          <button type="button" className="confirm-btn" ref={confirmRef}>
+            Yes
+          </button>
+          <button type="button" className="deny-btn" ref={denyRef}>
+            No
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
+});
 
 const JustPracticeFour = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [shouldDisplay, setShouldDisplay] = useState(false);
+  const customRef = useRef<CustomRef | null>(null);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      setErrorMessage("");
-      try {
-        const res = await fetch(POST_API_URL);
-        if (!res.ok) throw new Error("Failed to fetch Post data.");
-        setPosts((await res.json()).slice(0, 20));
-      } catch (e: any) {
-        setErrorMessage(e.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const toggleModal = useCallback(() => setShouldDisplay((prev) => !prev), []);
 
   return (
-    <div className="post-container">
-      <div className="post-search-controls">
-        <label htmlFor="search-post-input">Search Posts : </label>
-        <input
-          type="text"
-          id="search-post-input"
-          title="search-post-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      <Posts
-        posts={posts}
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-        searchQuery={searchQuery}
-      />
+    <div className="container">
+      <button className="toggle" type="button" onClick={toggleModal}>
+        {shouldDisplay ? "Hide" : "Show"}
+      </button>
+      {shouldDisplay && (
+        <div className="buttons">
+          <button
+            type="button"
+            className="focus-cancel-btn"
+            onClick={() => customRef.current?.focusCancelBtn()}
+          >
+            Focus Cancel
+          </button>
+          <button
+            type="button"
+            className="focus-confirm-btn"
+            onClick={() => customRef.current?.focusConfirmBtn()}
+          >
+            Focus Confirm
+          </button>
+          <button
+            type="button"
+            className="focus-deny-btn"
+            onClick={() => customRef.current?.focusDenyBtn()}
+          >
+            Focus Deny
+          </button>
+          <Modal ref={customRef} />
+        </div>
+      )}
     </div>
   );
 };
