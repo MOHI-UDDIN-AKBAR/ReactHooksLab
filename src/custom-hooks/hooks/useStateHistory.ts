@@ -1,74 +1,74 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 
-const useStateHistory = (initialState: number[]) => {
-  const [stateHistory, setStateHistory] = useState(initialState);
-  const [currentPosition, setCurrentPosition] = useState(
-    stateHistory.length - 1
+type UseStateHistoryReturnType = [
+  number,
+  (value: number | ((prevValue: number) => number)) => void,
+  number[],
+  number,
+  () => void,
+  () => void,
+  (index: number) => void,
+];
+
+const useStateHistory = (
+  initialValue: number,
+  maxHistoryLength: number = 10
+): UseStateHistoryReturnType => {
+  const [currentState, setCurrentState] = useState(initialValue);
+  const stateHistoryRef = useRef([initialValue]);
+  const currentPositionRef = useRef(0);
+
+  const updateState = useCallback(
+    (value: number | ((prevValue: number) => number)) => {
+      if (currentPositionRef.current >= maxHistoryLength) return;
+
+      const resolveValue =
+        typeof value === 'function' ? value(currentState) : value;
+
+      if (currentPositionRef.current !== stateHistoryRef.current.length - 1) {
+        stateHistoryRef.current = [
+          ...stateHistoryRef.current.slice(0, currentPositionRef.current + 1),
+          resolveValue,
+        ];
+      } else {
+        stateHistoryRef.current.push(resolveValue);
+      }
+
+      currentPositionRef.current = currentPositionRef.current + 1;
+      setCurrentState(resolveValue);
+    },
+    [currentState, maxHistoryLength]
   );
-  const [currentValue, setCurrentValue] = useState(
-    stateHistory[currentPosition]
-  );
 
-  const updateStateHistory = (value: number) => {
-    setStateHistory((prevHistory) => {
-      const newStateHistory = [
-        ...prevHistory.slice(0, currentPosition + 1),
-        value,
-      ];
-
-      const newPosition = newStateHistory.length - 1;
-      setCurrentPosition(newPosition);
-      setCurrentValue(newStateHistory[newPosition]);
-
-      return newStateHistory;
-    });
-  };
-
-  const double = () => {
-    const value = stateHistory[currentPosition] * 2;
-    updateStateHistory(value);
-  };
-
-  const increment = () => {
-    const value = stateHistory[currentPosition] + 1;
-    updateStateHistory(value);
-  };
-
-  const goBack = () => {
-    if (currentPosition > 0) {
-      const newPosition = currentPosition - 1;
-      setCurrentPosition(newPosition);
-      setCurrentValue(stateHistory[newPosition]);
-    }
-    console.log(currentPosition, currentValue);
-  };
-
-  const goForward = () => {
-    if (currentPosition < stateHistory.length - 1) {
-      const newPosition = currentPosition + 1;
-      setCurrentPosition(newPosition);
-      setCurrentValue(stateHistory[newPosition]);
-    }
-    console.log(currentPosition, currentValue);
-  };
-
-  const goToSpecificPosition = (position: number) => {
-    if (typeof stateHistory[position] === "number") {
-      setCurrentPosition(position);
-      setCurrentValue(stateHistory[position]);
+  const back = () => {
+    if (currentPositionRef.current > 0) {
+      currentPositionRef.current -= 1;
+      setCurrentState(stateHistoryRef.current[currentPositionRef.current]);
     }
   };
 
-  return {
-    stateHistory,
-    currentPositionValue: currentValue,
-    currentPosition: currentPosition,
-    double,
-    increment,
-    goBack,
-    goForward,
-    goToSpecificPosition,
+  const forward = () => {
+    const historyLength = stateHistoryRef.current.length;
+    if (currentPositionRef.current < historyLength - 1) {
+      currentPositionRef.current += 1;
+      setCurrentState(stateHistoryRef.current[currentPositionRef.current]);
+    }
   };
+
+  const goAt = (index: number) => {
+    currentPositionRef.current = index;
+    setCurrentState(stateHistoryRef.current[currentPositionRef.current]);
+  };
+
+  return [
+    currentState,
+    updateState,
+    stateHistoryRef.current,
+    currentPositionRef.current,
+    back,
+    forward,
+    goAt,
+  ];
 };
 
 export default useStateHistory;

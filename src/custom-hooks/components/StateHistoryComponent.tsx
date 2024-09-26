@@ -1,57 +1,52 @@
-import { useState } from "react";
-import useStateHistory from "../hooks/useStateHistory";
+import { useCallback, useState } from 'react';
+import useStateHistory from '../hooks/useStateHistory';
 
 const StateHistoryComponent = () => {
-  const [name, setName] = useState("Rifat");
-  const {
-    stateHistory,
-    currentPositionValue,
-    currentPosition,
-    double,
-    increment,
-    goBack,
-    goForward,
-    goToSpecificPosition,
-  } = useStateHistory([1]);
+  const [username, setUsername] = useState('Samir');
+
+  const [count, setCount, state, position, back, forward, goAt] =
+    useStateHistory(1);
+
+  const changeName = useCallback(() => setUsername('Rifat'), []);
 
   return (
-    <div className="state-history-container">
+    <div className="history-container">
       <div className="histories">
-        <p className="current-position-value">{currentPositionValue}</p>
-        <p className="full-state">{stateHistory.join(" ").toString()}</p>
-        <p className="current-position">{currentPosition}</p>
-        <p className="name">{name}</p>
+        <p className="current-value">{count}</p>
+        <p className="state-history">{state.join(' ').toString()}</p>
+        <p className="current-position">{position}</p>
+        <p className="username">{username}</p>
       </div>
-      <div className="action-buttons">
+      <div className="state-history-actions">
         <button
           type="button"
-          className="double-element__btn"
-          onClick={() => double()}
+          className="double__btn"
+          onClick={() => setCount((prevCount) => prevCount * 2)}
         >
           Double
         </button>
-        <button type="button" className="increment__btn" onClick={increment}>
+        <button
+          type="button"
+          className="increment__btn"
+          onClick={() => setCount((prevCount) => prevCount + 1)}
+        >
           Increment
         </button>
-        <button type="button" className="back__btn" onClick={goBack}>
+        <button type="button" className="back__btn" onClick={back}>
           Back
         </button>
-        <button type="button" className="forward__btn" onClick={goForward}>
+        <button type="button" className="forward__btn" onClick={forward}>
           Forward
         </button>
         <button
           type="button"
-          className="specific-position__btn"
-          onClick={() => goToSpecificPosition(2)}
+          className="go-specific-position__btn"
+          onClick={() => goAt(2)}
         >
-          Go To Index 2
+          Go To Position 2
         </button>
-        <button
-          type="button"
-          className="update-name__btn"
-          onClick={() => setName("Samir")}
-        >
-          Update Name
+        <button type="button" className="change-name__btn" onClick={changeName}>
+          Change Name
         </button>
       </div>
     </div>
