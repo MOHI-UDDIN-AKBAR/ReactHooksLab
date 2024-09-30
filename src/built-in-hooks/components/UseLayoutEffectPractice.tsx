@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState } from 'react';
 
 const UseLayoutEffectPractice = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const UseLayoutEffectPractice = () => {
     headerElement.style.top = `${top + 50}px`;
 
     return () => {
-      headerElement.style.top = "";
+      headerElement.style.top = '';
     };
   }, [show]);
 

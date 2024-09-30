@@ -4,9 +4,9 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
-const POSTS_API_URL = "https://jsonplaceholder.typicode.com/posts";
+const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 type PostType = {
   userId: number;
@@ -33,13 +33,13 @@ const UseContextPractice = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       try {
         const res = await fetch(POSTS_API_URL);
-        if (!res.ok) throw new Error("Failed to fetch posts");
+        if (!res.ok) throw new Error('Failed to fetch posts');
         const postData = await res.json();
         setPost(postData.slice(0, 10));
         setError(null);
       } catch (err: any) {
         setError(
-          err instanceof Error ? err.message : "An unknown error occurred"
+          err instanceof Error ? err.message : 'An unknown error occurred'
         );
       } finally {
         setIsLoading(false);
@@ -60,7 +60,7 @@ export const usePostsContext = () => {
 
   if (!context) {
     throw new Error(
-      "usePostsContext must be used within a UseContextPractice provider"
+      'usePostsContext must be used within a UseContextPractice provider'
     );
   }
   return context;

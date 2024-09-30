@@ -1,4 +1,4 @@
-import { usePostsContext } from "./UseContextPractice";
+import { usePostsContext } from './UseContextPractice';
 
 const NormalComponent = () => {
   const { posts, isLoading, error } = usePostsContext();
@@ -17,7 +17,7 @@ const NormalComponent = () => {
         <div
           className="post-card"
           key={id}
-          style={{ padding: "2rem", border: "2px solid grey", margin: "2rem" }}
+          style={{ padding: '2rem', border: '2px solid grey', margin: '2rem' }}
         >
           <h4 className="post-card__title">{title}</h4>
           <p className="post-card__body">{body}</p>

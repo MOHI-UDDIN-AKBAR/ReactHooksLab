@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 type ModalButtonRefType = {
   cancelFocus: () => void;
@@ -25,7 +25,7 @@ const Modal = forwardRef<
       denyRef.current?.focus();
     },
   }));
-  console.log("how");
+  console.log('how');
 
   return (
     <div className="modal">
@@ -70,14 +70,14 @@ const UseImperativeHandlePractice = () => {
           onClick={() => buttonRef.current?.cancelFocus()}
         >
           Focus Close
-        </button>{" "}
+        </button>
         <button
           type="button"
           className="open-btn"
           onClick={() => buttonRef.current?.confirmFocus()}
         >
           Focus Confirm
-        </button>{" "}
+        </button>
         <button
           type="button"
           className="open-btn"

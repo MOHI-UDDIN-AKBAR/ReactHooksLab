@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 const UseRefPractice = () => {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const renderCount = useRef<number>(1);
-  const prevName = useRef<string>("");
+  const prevName = useRef<string>('');
   const currName = useRef<string>(name);
 
   const focusInput = () => {
@@ -21,7 +21,7 @@ const UseRefPractice = () => {
       prevName.current = currName.current;
       currName.current = name;
     }
-    setName("");
+    setName('');
   };
 
   return (

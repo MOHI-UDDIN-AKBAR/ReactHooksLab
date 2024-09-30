@@ -1,6 +1,6 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from 'react';
 
-const PRODUCT_API_URL = "https://jsonplaceholder.typicode.com/photos";
+const PRODUCT_API_URL = 'https://jsonplaceholder.typicode.com/photos';
 const MAX_PRODUCT_PRICE = 1000;
 const MIN_PRODUCT_PRICE = 100;
 
@@ -22,20 +22,20 @@ type CardDetailsType = {
 };
 
 type AddProductAction = {
-  type: "ADD_PRODUCT";
+  type: 'ADD_PRODUCT';
   product: ProductType;
 };
 
 type RemoveProductAction = {
-  type: "REMOVE_PRODUCT";
+  type: 'REMOVE_PRODUCT';
   id: number;
 };
 type IncreaseProductAction = {
-  type: "INCREASE_PRODUCT_QUANTITY";
+  type: 'INCREASE_PRODUCT_QUANTITY';
   id: number;
 };
 type DecreaseProductAction = {
-  type: "DECREASE_PRODUCT_QUANTITY";
+  type: 'DECREASE_PRODUCT_QUANTITY';
   id: number;
 };
 
@@ -58,7 +58,7 @@ const reducer = (
   const { cartItems, totalQuantity, totalPrice } = state;
 
   switch (action.type) {
-    case "ADD_PRODUCT": {
+    case 'ADD_PRODUCT': {
       const { product } = action;
 
       const isProductExistInCart = (): boolean => {
@@ -93,7 +93,7 @@ const reducer = (
       return updatedState;
     }
 
-    case "INCREASE_PRODUCT_QUANTITY": {
+    case 'INCREASE_PRODUCT_QUANTITY': {
       let currentProductPrice: number = 0;
 
       const updatedCartItems = cartItems.map((item) => {
@@ -112,7 +112,7 @@ const reducer = (
       };
     }
 
-    case "DECREASE_PRODUCT_QUANTITY": {
+    case 'DECREASE_PRODUCT_QUANTITY': {
       let priceDecrement: number = 0;
 
       const updatedCartItems = cartItems.reduce((acc, item) => {
@@ -135,7 +135,7 @@ const reducer = (
       };
     }
 
-    case "REMOVE_PRODUCT": {
+    case 'REMOVE_PRODUCT': {
       const productToRemove = cartItems.find(
         (item) => item.product.id === action.id
       );
@@ -169,22 +169,22 @@ const generateRandomProductPrice = (): number =>
   );
 
 const addProductToCart = (product: ProductType): AddProductAction => ({
-  type: "ADD_PRODUCT",
+  type: 'ADD_PRODUCT',
   product: product,
 });
 
 const removeProductFromCart = (id: number): RemoveProductAction => ({
-  type: "REMOVE_PRODUCT",
+  type: 'REMOVE_PRODUCT',
   id: id,
 });
 
 const increaseProductQuantity = (id: number): IncreaseProductAction => ({
-  type: "INCREASE_PRODUCT_QUANTITY",
+  type: 'INCREASE_PRODUCT_QUANTITY',
   id,
 });
 
 const decreaseProductQuantity = (id: number): DecreaseProductAction => ({
-  type: "DECREASE_PRODUCT_QUANTITY",
+  type: 'DECREASE_PRODUCT_QUANTITY',
   id,
 });
 
@@ -292,17 +292,17 @@ const CardSummary = ({
 
 const JustPracticeFour = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [products, setProducts] = useState<ProductType[]>([]);
   const [cardDetails, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchProductsData = async () => {
       setIsLoading(true);
-      setError("");
+      setError('');
       try {
         const res = await fetch(PRODUCT_API_URL);
-        if (!res.ok) throw new Error("Failed to fetch Products data.");
+        if (!res.ok) throw new Error('Failed to fetch Products data.');
         const data = await res.json();
         setProducts(
           data.slice(0, 20).map((item: ProductType) => ({
@@ -329,9 +329,9 @@ const JustPracticeFour = () => {
           {isLoading && (
             <h1
               style={{
-                border: "2px solid blue",
-                margin: "1rem",
-                padding: "1rem",
+                border: '2px solid blue',
+                margin: '1rem',
+                padding: '1rem',
               }}
             >
               Loading...
@@ -340,9 +340,9 @@ const JustPracticeFour = () => {
           {error && (
             <h1
               style={{
-                border: "2px solid blue",
-                margin: "1rem",
-                padding: "1rem",
+                border: '2px solid blue',
+                margin: '1rem',
+                padding: '1rem',
               }}
             >
               {error}

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
+const API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 type PostType = {
   userId: number;
@@ -10,11 +10,11 @@ type PostType = {
 };
 
 const JustPracticeThree = () => {
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [posts, setPosts] = useState<PostType[] | null>(null);
   const [filteredPosts, setFilteredPosts] = useState<PostType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const formatTitle = (title: string): string => {
     return title.length > 30
@@ -30,7 +30,7 @@ const JustPracticeThree = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       setIsLoading(true);
-      setError("");
+      setError('');
       try {
         const response = await fetch(API_URL);
         if (!response.ok) {
@@ -40,8 +40,8 @@ const JustPracticeThree = () => {
         const data = await response.json();
         setPosts(data.slice(0, 20));
       } catch (e: any) {
-        if (e.message === "Failed to fetch") {
-          setError("Failed to fetch Post Data");
+        if (e.message === 'Failed to fetch') {
+          setError('Failed to fetch Post Data');
         } else {
           setError(e.message);
         }
@@ -83,10 +83,10 @@ const JustPracticeThree = () => {
           {isLoading && (
             <h1
               style={{
-                color: "blue",
-                padding: "1rem",
-                margin: "3rem",
-                border: "2px solid green",
+                color: 'blue',
+                padding: '1rem',
+                margin: '3rem',
+                border: '2px solid green',
               }}
             >
               Loading....
@@ -97,10 +97,10 @@ const JustPracticeThree = () => {
           {error && (
             <h1
               style={{
-                color: "blue",
-                padding: "1rem",
-                margin: "3rem",
-                border: "2px solid green",
+                color: 'blue',
+                padding: '1rem',
+                margin: '3rem',
+                border: '2px solid green',
               }}
             >
               {error}
@@ -115,9 +115,9 @@ const JustPracticeThree = () => {
               key={id}
               className="post-card"
               style={{
-                border: "2px solid blue",
-                margin: "2rem",
-                padding: "1rem",
+                border: '2px solid blue',
+                margin: '2rem',
+                padding: '1rem',
               }}
             >
               <h1 className="post-title">{formatTitle(title)}</h1>

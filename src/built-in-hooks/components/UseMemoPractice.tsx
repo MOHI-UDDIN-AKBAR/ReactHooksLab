@@ -1,12 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
 const UseMemoPractice = () => {
   const [number, setNumber] = useState<number>(0);
   const [isDark, setIsDark] = useState<boolean>(false);
 
   const styleTheme = {
-    backgroundColor: isDark ? "black" : "white",
-    color: isDark ? "white" : "black",
+    backgroundColor: isDark ? 'black' : 'white',
+    color: isDark ? 'white' : 'black',
   };
 
   const doubleNumber = useMemo((): number => {

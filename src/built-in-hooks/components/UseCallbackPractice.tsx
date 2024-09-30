@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 type PostType = {
   body: string;
@@ -12,7 +12,7 @@ type PostPropsType = {
   posts: PostType[];
 };
 
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
+const API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 const Post = memo(({ fetchPostData, posts }: PostPropsType) => {
   useEffect(() => {
@@ -25,7 +25,7 @@ const Post = memo(({ fetchPostData, posts }: PostPropsType) => {
         <div
           key={id}
           className="post"
-          style={{ border: "2px solid green", padding: "1rem", margin: "1rem" }}
+          style={{ border: '2px solid green', padding: '1rem', margin: '1rem' }}
         >
           <h3 className="post-title">{title}</h3>
           <p className="post-body">{body}</p>
@@ -40,9 +40,9 @@ const UseCallbackPractice = () => {
   const [count, setCount] = useState<number>(0);
 
   const handleCounter = (type: string) => {
-    if (type === "add") {
+    if (type === 'add') {
       setCount((prev) => prev + 1);
-    } else if (type === "subtract") {
+    } else if (type === 'subtract') {
       setCount((prev) => prev - 1);
     }
   };
@@ -50,7 +50,7 @@ const UseCallbackPractice = () => {
   const fetchPostData = useCallback(async () => {
     try {
       const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Post Not Found!");
+      if (!response.ok) throw new Error('Post Not Found!');
       const postsData = await response.json();
       setPosts(postsData.slice(0, 10));
     } catch (e: any) {
@@ -66,7 +66,7 @@ const UseCallbackPractice = () => {
         <button
           type="button"
           className="counter-btn"
-          onClick={() => handleCounter("subtract")}
+          onClick={() => handleCounter('subtract')}
         >
           Decrement
         </button>
@@ -74,7 +74,7 @@ const UseCallbackPractice = () => {
         <button
           type="button"
           className="counter-btn"
-          onClick={() => handleCounter("add")}
+          onClick={() => handleCounter('add')}
         >
           Increment
         </button>

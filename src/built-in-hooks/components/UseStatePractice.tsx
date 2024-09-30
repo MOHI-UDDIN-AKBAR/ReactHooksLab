@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 type User = {
   username: string;
@@ -9,9 +9,9 @@ type User = {
 type UserCardProps = { user: User };
 
 const initialUserState: User = {
-  username: "",
-  email: "",
-  password: "",
+  username: '',
+  email: '',
+  password: '',
 };
 
 const UserCard = ({ user: { username, email, password } }: UserCardProps) => {
@@ -45,9 +45,9 @@ const UseStatePractice = () => {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      username: "",
-      email: "",
-      password: "",
+      username: '',
+      email: '',
+      password: '',
     }));
   };
 
@@ -73,7 +73,7 @@ const UseStatePractice = () => {
             value={formData.email}
             onChange={handleInputChange}
           />
-        </div>{" "}
+        </div>{' '}
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input

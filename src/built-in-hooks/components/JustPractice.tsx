@@ -2,11 +2,10 @@ import {
   FormEvent,
   forwardRef,
   useCallback,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 type User = {
   username: string;
@@ -15,9 +14,9 @@ type User = {
 };
 
 const initialSingleUserValue = {
-  username: "",
-  email: "",
-  password: "",
+  username: '',
+  email: '',
+  password: '',
 };
 
 type UserKeys = keyof User;
@@ -46,7 +45,7 @@ const InputField = forwardRef<HTMLInputElement | null, InputFieldPropsType>(
           onChange={onChange}
         />
         {error && (
-          <small style={{ color: "red" }} className="error-message">
+          <small style={{ color: 'red' }} className="error-message">
             {error}
           </small>
         )}
@@ -55,7 +54,7 @@ const InputField = forwardRef<HTMLInputElement | null, InputFieldPropsType>(
   }
 );
 
-InputField.displayName = "InputField";
+InputField.displayName = 'InputField';
 
 const JustPractice = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -66,7 +65,7 @@ const JustPractice = () => {
     username: string;
     email: string;
     password: string;
-  }>({ username: "", email: "", password: "" });
+  }>({ username: '', email: '', password: '' });
   const refOfName = useRef<null | HTMLInputElement>(null);
   const refOfEmail = useRef<null | HTMLInputElement>(null);
   const refOfPassword = useRef<null | HTMLInputElement>(null);
@@ -74,7 +73,7 @@ const JustPractice = () => {
   const updateErrorFields = useCallback((user: User) => {
     const newErrorMessage = Object.keys(user).reduce((acc, key) => {
       const fieldValue = user[key as UserKeys];
-      acc[key as UserKeys] = !fieldValue ? `Pleas, Type valid ${key}` : "";
+      acc[key as UserKeys] = !fieldValue ? `Pleas, Type valid ${key}` : '';
       return acc;
     }, {} as User);
 
@@ -109,22 +108,22 @@ const JustPractice = () => {
   };
 
   const removeErrorMessage = useCallback((fieldType: keyof User) => {
-    setErrorMessage((prev) => ({ ...prev, [fieldType]: "" }));
+    setErrorMessage((prev) => ({ ...prev, [fieldType]: '' }));
   }, []);
 
   useLayoutEffect(() => {
     const refs = [
       {
         inputElement: refOfName.current,
-        fieldType: "username",
+        fieldType: 'username',
       },
       {
         inputElement: refOfEmail.current,
-        fieldType: "email",
+        fieldType: 'email',
       },
       {
         inputElement: refOfPassword.current,
-        fieldType: "password",
+        fieldType: 'password',
       },
     ];
 
@@ -134,9 +133,9 @@ const JustPractice = () => {
 
       const handleFocus = () => removeErrorMessage(ref.fieldType as keyof User);
 
-      element.addEventListener("focus", handleFocus);
+      element.addEventListener('focus', handleFocus);
       return () => {
-        element.removeEventListener("focus", handleFocus);
+        element.removeEventListener('focus', handleFocus);
       };
     });
   }, [refOfName, refOfEmail, refOfPassword, removeErrorMessage]);
@@ -150,7 +149,7 @@ const JustPractice = () => {
         title="username"
         value={singleUser.username}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChanges(e, "username")
+          handleChanges(e, 'username')
         }
         error={errorMessage.username}
         ref={refOfName}
@@ -163,7 +162,7 @@ const JustPractice = () => {
         title="email"
         value={singleUser.email}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChanges(e, "email")
+          handleChanges(e, 'email')
         }
         error={errorMessage.email}
         ref={refOfEmail}
@@ -176,7 +175,7 @@ const JustPractice = () => {
         title="password"
         value={singleUser.password}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChanges(e, "password")
+          handleChanges(e, 'password')
         }
         error={errorMessage.password}
         ref={refOfPassword}

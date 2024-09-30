@@ -4,7 +4,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 type CustomRef = {
   focusCancelBtn: () => void;
@@ -61,7 +61,7 @@ const JustPracticeFour = () => {
   return (
     <div className="container">
       <button className="toggle" type="button" onClick={toggleModal}>
-        {shouldDisplay ? "Hide" : "Show"}
+        {shouldDisplay ? 'Hide' : 'Show'}
       </button>
       {shouldDisplay && (
         <div className="buttons">

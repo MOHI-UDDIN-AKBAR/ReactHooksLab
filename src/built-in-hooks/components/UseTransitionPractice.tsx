@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from 'react';
 
 type CommentType = {
   postId: number;
@@ -8,10 +8,10 @@ type CommentType = {
   body: string;
 };
 
-const COMMENTS_API_URL = "https://jsonplaceholder.typicode.com/comments";
+const COMMENTS_API_URL = 'https://jsonplaceholder.typicode.com/comments';
 
 const UseTransitionPractice = () => {
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filterComments, setFilterComments] = useState<CommentType[]>([]);
@@ -45,7 +45,7 @@ const UseTransitionPractice = () => {
       setIsLoading(true);
       try {
         const response = await fetch(COMMENTS_API_URL);
-        if (!response.ok) throw new Error("Failed to fetch comments");
+        if (!response.ok) throw new Error('Failed to fetch comments');
         setComments(await response.json());
       } catch (e: any) {
         console.error(e.message);
@@ -74,7 +74,7 @@ const UseTransitionPractice = () => {
           <div
             key={id}
             className="comment"
-            style={{ padding: "2rem", margin: "2rem" }}
+            style={{ padding: '2rem', margin: '2rem' }}
           >
             <h3 className="title">{name}</h3>
             <p className="body">{body}</p>

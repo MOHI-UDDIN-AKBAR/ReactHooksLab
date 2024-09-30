@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 type PostType = {
   userId: number;
@@ -38,14 +38,14 @@ type UserType = {
   };
 };
 
-type ResourceName = "posts" | "comments" | "users";
+type ResourceName = 'posts' | 'comments' | 'users';
 type ResourceDataType = PostType[] | CommentType[] | UserType[];
 
 const capitalizeFirstLetter = (str: string): string =>
   str.charAt(0)?.toUpperCase() + str.slice(1);
 
 const UseEffectPractice = () => {
-  const [resourceName, setResourceName] = useState<ResourceName>("posts");
+  const [resourceName, setResourceName] = useState<ResourceName>('posts');
   const [resourceData, setResourceData] = useState<ResourceDataType>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -66,7 +66,7 @@ const UseEffectPractice = () => {
           `https://jsonplaceholder.typicode.com/${resourceName}`
         );
         if (!res.ok) {
-          throw new Error("Not Found!");
+          throw new Error('Not Found!');
         }
         const data = await res.json();
         setResourceData(data.slice(0, 10));
@@ -84,7 +84,7 @@ const UseEffectPractice = () => {
   return (
     <div className="resource-type">
       <div className="btn-group">
-        {(["posts", "comments", "users"] as ResourceName[]).map((type) => (
+        {(['posts', 'comments', 'users'] as ResourceName[]).map((type) => (
           <button
             key={type}
             type="button"

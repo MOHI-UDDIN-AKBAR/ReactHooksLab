@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-const API_URL = "https://jsonplaceholder.typicode.com/";
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 type PostType = {
   userId: number;
@@ -25,11 +25,11 @@ type PhotoType = {
   thumbnailUrl: string;
 };
 
-type ResourceType = "posts" | "comments" | "photos";
+type ResourceType = 'posts' | 'comments' | 'photos';
 type ResourceDataType =
-  | { type: "posts"; data: PostType[] }
-  | { type: "comments"; data: CommentType[] }
-  | { type: "photos"; data: PhotoType[] };
+  | { type: 'posts'; data: PostType[] }
+  | { type: 'comments'; data: CommentType[] }
+  | { type: 'photos'; data: PhotoType[] };
 
 type ResourceRendererType = {
   resourceData: ResourceDataType;
@@ -43,9 +43,9 @@ const Posts = ({ posts }: { posts: PostType[] }) => {
           className="post"
           key={id}
           style={{
-            border: "2px solid green",
-            padding: "1rem",
-            margin: "1rem",
+            border: '2px solid green',
+            padding: '1rem',
+            margin: '1rem',
           }}
         >
           <h4 className="post-title">{title}</h4>
@@ -64,9 +64,9 @@ const Comments = ({ comments }: { comments: CommentType[] }) => {
           className="comment"
           key={id}
           style={{
-            border: "2px solid green",
-            padding: "1rem",
-            margin: "1rem",
+            border: '2px solid green',
+            padding: '1rem',
+            margin: '1rem',
           }}
         >
           <h4 className="comment-name">{name}</h4>
@@ -85,9 +85,9 @@ const Photos = ({ photos }: { photos: PhotoType[] }) => {
           className="photo"
           key={id}
           style={{
-            border: "2px solid green",
-            padding: "1rem",
-            margin: "1rem",
+            border: '2px solid green',
+            padding: '1rem',
+            margin: '1rem',
           }}
         >
           <h4 className="photo-title">{title}</h4>
@@ -100,13 +100,13 @@ const Photos = ({ photos }: { photos: PhotoType[] }) => {
 
 const ResourceRenderer = ({ resourceData }: ResourceRendererType) => {
   switch (resourceData.type) {
-    case "posts": {
+    case 'posts': {
       return <Posts posts={resourceData.data} />;
     }
-    case "comments": {
+    case 'comments': {
       return <Comments comments={resourceData.data} />;
     }
-    case "photos": {
+    case 'photos': {
       return <Photos photos={resourceData.data} />;
     }
   }
@@ -117,10 +117,10 @@ const Loader = () => {
     <div
       className="loader"
       style={{
-        border: "3px solid blue",
-        padding: "1rem",
-        fontSize: "2rem",
-        margin: "3rem",
+        border: '3px solid blue',
+        padding: '1rem',
+        fontSize: '2rem',
+        margin: '3rem',
       }}
     >
       <h1 className="loader-data">Loading...</h1>
@@ -131,24 +131,24 @@ const JustPracticeTwo = () => {
   const [resourceData, setResourceData] = useState<
     ResourceDataType | undefined
   >(undefined);
-  const [resourceType, setResourceType] = useState<ResourceType>("posts");
-  const [value, setValue] = useState("");
+  const [resourceType, setResourceType] = useState<ResourceType>('posts');
+  const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (value === "posts" || value === "comments" || value === "photos") {
+    if (value === 'posts' || value === 'comments' || value === 'photos') {
       setResourceType(value);
     }
-    setValue("");
+    setValue('');
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setError("");
+      setError('');
       try {
         const res = await fetch(`${API_URL}${resourceType}`);
         if (!res.ok) {
@@ -157,7 +157,7 @@ const JustPracticeTwo = () => {
         const resData = await res.json();
         setResourceData({ type: resourceType, data: resData.slice(0, 10) });
       } catch (e: any) {
-        if (e.message === "Failed to fetch") {
+        if (e.message === 'Failed to fetch') {
           setError(`Network error: Failed to fetch ${resourceType} data`);
         } else {
           setError(e.message);
@@ -187,7 +187,7 @@ const JustPracticeTwo = () => {
       <div className="status">
         {isLoading && <Loader />}
         {error && (
-          <p style={{ color: "red", padding: ".5rem", margin: "1rem" }}>
+          <p style={{ color: 'red', padding: '.5rem', margin: '1rem' }}>
             {error}
           </p>
         )}
