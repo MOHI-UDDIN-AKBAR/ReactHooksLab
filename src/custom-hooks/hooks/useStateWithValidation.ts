@@ -1,30 +1,22 @@
 import { useCallback, useState } from 'react';
-import { Person, IsValid } from '../components/StateWithValidationComponent';
 
 const useStateWithValidation = (
-  validate: (value: string) => boolean,
-  initialState: Person,
-  initialIsValid: IsValid
+  callback: (value: string) => boolean,
+  initialState: string
 ) => {
-  const [state, setState] = useState(() => initialState);
-  const [isValid, setIsValid] = useState(initialIsValid);
+  const [state, setState] = useState(initialState);
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = useCallback(
-    (value: string | ((value: string) => string), key: keyof Person) => {
-      const updatedValue =
-        typeof value === 'string' ? value : value(state[key]);
-
-      setIsValid((prev) => ({
-        ...prev,
-        [key]: validate(updatedValue),
-      }));
-
-      setState((prevPerson) => ({ ...prevPerson, [key]: updatedValue }));
+  const onChange = useCallback(
+    (value: string | (() => string)) => {
+      const updatedValue = typeof value === 'string' ? value : value();
+      setIsValid(callback(updatedValue));
+      setState(updatedValue);
     },
-    [validate, state]
+    [callback]
   );
 
-  return { state, setState, handleChange, isValid };
+  return { username: state, setUsername: onChange, isValid };
 };
 
 export default useStateWithValidation;
