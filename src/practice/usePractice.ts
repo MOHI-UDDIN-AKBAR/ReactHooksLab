@@ -1,4 +1,7 @@
 import { isEqual } from 'lodash';
+import copy from 'copy-to-clipboard';
+import Cookies from 'js-cookie';
+
 import {
   useCallback,
   useEffect,
@@ -12,6 +15,11 @@ type Post = {
   id: number;
   title: string;
   body: string;
+};
+
+type TProps = {
+  boolean: boolean;
+  count: number;
 };
 
 const useTimeout = (callback: () => void, delay: number = 1000) => {
@@ -184,7 +192,6 @@ const useAsync = <T>(promise: () => Promise<T>) => {
       setIsLoading(true);
       setError('');
       const response = await promise();
-      console.log(response);
       if (response) {
         setData(response);
       } else {
@@ -255,8 +262,6 @@ const useEventListener = <
 ) => {
   const handleEvent = useCallback(
     (e: Event) => {
-      console.log(e);
-      console.log('render');
       callback(e as K);
     },
     [callback]
@@ -287,7 +292,6 @@ const useOnScreen = <T extends HTMLElement>(
     if (!observerRef.current) {
       observerRef.current = new IntersectionObserver(
         ([entry]) => {
-          console.log(entry);
           setIsVisible(entry.isIntersecting);
         },
         { rootMargin: margin }
@@ -319,27 +323,27 @@ const useWindowSize = () => {
   return { width, height };
 };
 
-const useMediaQuery = (maxWidth: string) => {
-  const [isScreenLarge, setIsScreenLarge] = useState<boolean>(false);
+const useMediaQuery = (query: string) => {
+  const [isMatch, setIsMatch] = useState<boolean>(false);
   const mediaQueryRef = useRef<MediaQueryList | null>(null);
 
   useLayoutEffect(() => {
-    mediaQueryRef.current = window.matchMedia(maxWidth);
-    setIsScreenLarge(mediaQueryRef.current.matches);
+    mediaQueryRef.current = window.matchMedia(query);
+    setIsMatch(mediaQueryRef.current.matches);
     return () => {
       mediaQueryRef.current = null;
     };
-  }, [maxWidth]);
+  }, [query]);
 
   useEventListener<MediaQueryList, MediaQueryListEvent>(
     mediaQueryRef,
     'change',
     (e: MediaQueryListEvent) => {
-      setIsScreenLarge(e.matches);
+      setIsMatch(e.matches);
     }
   );
 
-  return isScreenLarge;
+  return isMatch;
 };
 
 type GeoLocationCoords = {
@@ -410,9 +414,7 @@ const useStateValidation = (callback: (state: string) => boolean) => {
   return { isValid, value, setValue: onChange };
 };
 
-const usePractice = <T extends HTMLTextAreaElement>(
-  ref: React.RefObject<T>
-) => {
+const useSize = <T extends HTMLTextAreaElement>(ref: React.RefObject<T>) => {
   const [size, setSize] = useState<DOMRectReadOnly | null>(null);
   const observeRef = useRef<ResizeObserver | null>(null);
 
@@ -434,5 +436,217 @@ const usePractice = <T extends HTMLTextAreaElement>(
   }, [ref]);
 
   return size;
+};
+
+const useClickOutside = <T extends HTMLElement>(
+  ref: React.RefObject<T>,
+  openBtnClassName: string
+) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEventListener<Document, MouseEvent>(document, 'click', (e: MouseEvent) => {
+    if (!ref.current || !openBtnClassName) return;
+    const element = e.target as HTMLElement;
+    const refElement = ref.current;
+
+    setIsOpen(
+      !(!element.classList.contains(openBtnClassName) && element !== refElement)
+    );
+  });
+
+  return { isOpen, setIsOpen };
+};
+
+const useDarkMode = (className: string) => {
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const savedValue = localStorage.getItem(className);
+    if (savedValue) return JSON.parse(savedValue);
+    return false;
+  });
+
+  const isMatch = useMediaQuery('(prefers-color-scheme: dark)');
+  const enable = isDark ?? isMatch;
+
+  useLayoutEffect(() => {
+    localStorage.setItem(className, JSON.stringify(enable));
+    document.body.classList.toggle(className, enable);
+  }, [enable, className]);
+
+  return { isDark, setIsDark };
+};
+
+const useCopyToClipBorad = () => {
+  const [status, setStatus] = useState(false);
+
+  const copyText = useCallback((value: string) => {
+    try {
+      const result = copy(value);
+      setStatus(result);
+      const timeoutId = setTimeout(() => {
+        setStatus(false);
+        clearTimeout(timeoutId);
+      }, 2000);
+    } catch (e: any) {
+      setStatus(false);
+    }
+  }, []);
+
+  return { copyText, status };
+};
+
+const useCookie = (key: string, initialCookie: string) => {
+  const [state, setState] = useState(() => {
+    const savedCookie = Cookies.get(key);
+    if (savedCookie) {
+      return savedCookie;
+    }
+    return initialCookie;
+  });
+
+  const changeCookie = useCallback(
+    (newCookie: string) => {
+      setState(newCookie);
+      Cookies.set(key, newCookie, { expires: 7, path: '/' });
+    },
+    [key]
+  );
+
+  const removeCookie = () => {
+    Cookies.remove(key);
+    setState('');
+  };
+
+  useEffect(() => {
+    const savedCookie = Cookies.get(key);
+    if (!savedCookie) {
+      Cookies.set(key, initialCookie, { expires: 7, path: '/' });
+    }
+  }, []);
+
+  return { state, setState, changeCookie, removeCookie };
+};
+
+// useEventListener<Window, Event>(window, 'online', (e: Event) => {
+//   console.log(navigator.onLine);
+// });
+// useEventListener<Window, Event>(window, 'offline', (e: Event) => {
+//   console.log(navigator.onLine);
+// });
+
+const useOnlineStatus = () => {
+  const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
+
+  useEventListener<Window, Event>(window, 'online', (e: Event) =>
+    setOnlineStatus(navigator.onLine)
+  );
+  useEventListener<Window, Event>(window, 'offline', (e: Event) =>
+    setOnlineStatus(navigator.onLine)
+  );
+
+  return onlineStatus;
+};
+
+const useRenderCount = () => {
+  const renderCountRef = useRef<number>(1);
+
+  useEffect(() => {
+    renderCountRef.current += 1;
+  });
+
+  return renderCountRef.current;
+};
+
+type TBoolean = {
+  previous: boolean;
+  current: boolean;
+};
+type TCount = {
+  previous: number;
+  current: number;
+};
+type ChangedProps = {
+  changedProps: {
+    [key: string]: TBoolean | TCount | {};
+  };
+};
+
+const useDebugInfo = <T extends TProps>(props: T, componentName: string) => {
+  const changedPropsRef = useRef<ChangedProps>({ changedProps: {} });
+  const prevPropsRef = useRef(props);
+  const renderCount = useRenderCount();
+  const lastRenderTimestamp = useRef(Date.now());
+
+  const getChangedPropsKeys = (prev: T, curr: T) => {
+    return Object.keys(curr).reduce((obj, key) => {
+      if (prev[key as keyof T] === curr[key as keyof T]) return obj;
+      return [...obj, key as string];
+    }, [] as string[]);
+  };
+
+  const changedPropsKeys = getChangedPropsKeys(prevPropsRef.current, props);
+
+  if (changedPropsKeys.length) {
+    changedPropsKeys.forEach((key) => {
+      changedPropsRef.current.changedProps[key] = {
+        ...changedPropsRef.current.changedProps,
+        previous: prevPropsRef.current[key as keyof T],
+        current: props[key as keyof T],
+      };
+    });
+  }
+
+  const info = {
+    renderCount,
+    ...changedPropsRef.current,
+    timeSinceLastRender: Date.now() - lastRenderTimestamp.current,
+    lastRenderTimestamp: lastRenderTimestamp.current,
+  };
+
+  useEffect(() => {
+    console.log(`[debug-info]-${componentName}-\t${JSON.stringify(info)}`);
+    lastRenderTimestamp.current = Date.now();
+    prevPropsRef.current = props;
+    return () => {
+      changedPropsRef.current = { changedProps: {} };
+    };
+  });
+
+  return info;
+};
+
+const useHover = <T extends HTMLElement>(ref: React.RefObject<T>) => {
+  const [isHoverOn, setIsHoverOn] = useState(false);
+
+  useEventListener<T, MouseEvent>(ref, 'mouseenter', () => setIsHoverOn(true));
+  useEventListener<T, MouseEvent>(ref, 'mouseout', () => setIsHoverOn(false));
+
+  return isHoverOn;
+};
+
+const usePractice = <T extends HTMLElement>(
+  ref: React.RefObject<T>,
+  cb: () => void,
+  delay: number = 1500
+) => {
+  const { removeTimeOut, resetTimeout } = useTimeout(cb, delay);
+
+  useEventListener<T, MouseEvent>(ref, 'mousedown', (e: MouseEvent) =>
+    resetTimeout()
+  );
+  useEventListener<T, MouseEvent>(ref, 'touchstart', (e: MouseEvent) =>
+    resetTimeout()
+  );
+
+  useEventListener<T, MouseEvent>(ref, 'mouseup', (e: MouseEvent) =>
+    removeTimeOut()
+  );
+  useEventListener<T, MouseEvent>(ref, 'mouseleave', (e: MouseEvent) =>
+    removeTimeOut()
+  );
+  useEventListener<T, MouseEvent>(ref, 'touchend', (e: MouseEvent) =>
+    removeTimeOut()
+  );
+
+  useEffect(() => removeTimeOut(), []);
 };
 export default usePractice;
