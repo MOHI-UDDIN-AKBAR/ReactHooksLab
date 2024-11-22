@@ -14,6 +14,18 @@ import OnScreenComponent from './components/OnScreenComponent';
 import WindowSizeComponent from './components/WindowSizeComponent';
 import MediaQueryComponent from './components/MediaQueryComponent';
 import GeolocationComponent from './components/GeolocationComponent';
+import StateWithValidationComponent from './components/StateWithValidationComponent';
+import SizeComponent from './components/SizeComponent';
+import EffectOnceComponent from './components/EffectOnceComponent';
+import ClickOutsideComponent from './components/ClickOutsideComponent';
+import DarkModeComponent from './components/DarkModeComponent';
+import CopyToClipboardComponent from './components/CopyToClipboardComponent';
+import CookieComponent from './components/CookieComponent';
+import OnlineStatusComponent from './components/OnlineStatusComponent';
+import RenderCountComponent from './components/RenderCountComponent';
+import DebugInfoComponent from './components/DebugInfoComponent';
+import HoverComponent from './components/HoverComponent';
+import LongPressComponent from './components/LongPressComponent';
 
 export {
   ToggleComponent,
@@ -32,4 +44,16 @@ export {
   WindowSizeComponent,
   MediaQueryComponent,
   GeolocationComponent,
+  StateWithValidationComponent,
+  SizeComponent,
+  EffectOnceComponent,
+  ClickOutsideComponent,
+  DarkModeComponent,
+  CopyToClipboardComponent,
+  CookieComponent,
+  OnlineStatusComponent,
+  RenderCountComponent,
+  DebugInfoComponent,
+  HoverComponent,
+  LongPressComponent,
 };
